@@ -2,7 +2,7 @@ NODE2VEC=~/Downloads/Snap-4.0/examples/node2vec
 RIPSER=~/research/libraries/ripser/ripser
 
 
-FILENAME=circle
+FILENAME=sphere
 GRAPHFILE=graphs/$FILENAME.edgelist
 EMBFILE=embeddings/$FILENAME.emb
 TMPBARCODEFILE=barcodes/tmp_$FILENAME.bc
@@ -21,7 +21,7 @@ python parse_ripser.py trim $EMBFILE $TMPEMBFILE
 
 echo ""
 echo "Compute persistent homology on embedding file"
-$RIPSER --format point-cloud $TMPEMBFILE > $TMPBARCODEFILE
+$RIPSER --format point-cloud --dim 1 $TMPEMBFILE > $TMPBARCODEFILE
 
 python parse_ripser.py parse $TMPBARCODEFILE $BARCODEFILE
 
