@@ -1,14 +1,14 @@
 # About
 
-The goal of this project is to explore the Node2Vec graph embedding.
+The goal of this project is to explore attributes of the Node2Vec graph embedding. This will be guided by the question "does Node2Vec preserve the homology of the graph?"
 
-To do this, we will ask the question "Does Node2Vec preserve the homology of the graph?"
+This is part of [Graph Theory Final Project](http://www.math.wsu.edu/courseinfo/syllabi/2017fall/m453-01-2173.pdf)
+
 
 # Main experiment
 
 1. Construct a random graph with known homology.
-  1. ensure correct format for node2vec input
-2. Embed into a vector space via Node2Vec.
+2. Embed the graph into a vector space via Node2Vec.
 3. Compute persistent homology of the embedding.
 4. Compare original homology to persistent homology.
 
@@ -21,18 +21,16 @@ To do this, we will ask the question "Does Node2Vec preserve the homology of the
 
 **Accuracy**: I do not know how to compare known homology to persistent homology.
 
-- How do we say how close the homology is?
-- When does the preservation break down?
-- Are new homology features created?
+# Setup
 
-# Steps
-
-Install snap 4.0
-
-## Example node2vec
-
-``` bash
-cd ~/Downloads/Snap-4.0/examples/node2vec
-./node2vec -i:graph/karate.edgelist -o:emb/karate.emb -l:3 -d:24 -p:0.3 -dr -v
+We use [SNAP](https://snap.stanford.edu/snap/) node2vec implementation, [Ripser](https://github.com/sauln/ripser) for computing persistent homology, [NetworkX](https://networkx.github.io/) for generating graphs, [Bokeh](https://bokeh.pydata.org/en/latest/) for plotting, and [UMAP](https://github.com/lmcinnes/umap) for dimensionality reduction.
 
 ```
+cd demo
+chmod a+x run_example.sh
+./run_example.sh
+```
+
+# Results
+
+Preliminary experiments using a simple circle graph show that the persistent homology of produces expected results.

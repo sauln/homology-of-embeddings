@@ -25,6 +25,4 @@ $RIPSER --format point-cloud $TMPEMBFILE > $TMPBARCODEFILE
 
 python parse_ripser.py parse $TMPBARCODEFILE $BARCODEFILE
 
-# rm $TMPEMBFILE $TMPBARCODEFILE
-# Visualize embedding
 python visualize.py $BARCODEFILE
