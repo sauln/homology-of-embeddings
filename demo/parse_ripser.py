@@ -12,6 +12,8 @@ def parse_barcode(infile, outfile):
 
     persistence_diagram = {}
 
+    max_range = float(lines[2].decode('utf-8').split(",")[1].replace("]", ""))
+
     # find dim N start and finish
     for line in lines[3:]:
         line = line.decode('utf-8')
@@ -23,7 +25,7 @@ def parse_barcode(infile, outfile):
             start = float(start.replace(" [", ""))
 
             if finish[:2] == ' )':
-                finish = 99
+                finish = max_range
             else:
                 finish = float(finish.replace(")\n", ""))
 
@@ -42,10 +44,7 @@ def trim_ripser(infile, outfile):
     emb = read_emb(infile)
     emb = emb[1:,]
 
-
     np.savetxt(outfile, emb, delimiter=" ")
-
-
 
 
 @click.command()

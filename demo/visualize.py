@@ -2,6 +2,11 @@ import click
 import umap
 import matplotlib.pyplot as plt
 
+import json
+
+from bokeh.plotting import figure, show
+from bokeh.layouts import gridplot
+
 from sklearn import datasets
 from utils import read_emb
 
@@ -18,9 +23,35 @@ def plot_embedding(filename):
     plt.scatter(data[:,0], data[:,1])
     plt.show()
 
-def plot_barcode():
-    pass
+@click.command()
+@click.argument('filename', default="barcodes/circle.json")
+def plot_barcode(filename):
+    with open(filename) as json_data:
+        data = json.load(json_data)
+
+    plots = []
+    for dim, value in data.items():
+        bars = {}
+        bars['xs'] = []
+        bars['ys'] = []
+
+        p = figure(plot_width=600, plot_height=300, title=dim)
+        p.yaxis.visible = False
+
+        for i, bar in enumerate(value):
+            start, end = bar
+            level = i
+
+            bars['xs'].append([start, end])
+            bars['ys'].append([level, level])
+
+
+        p.multi_line(xs="xs", ys="ys", line_width=5, source=bars)
+        plots.append(p)
+
+    show(gridplot([plots]))
+
 
 
 if __name__ == "__main__":
-    plot_embedding()
+    plot_barcode()

@@ -27,4 +27,4 @@ python parse_ripser.py parse $TMPBARCODEFILE $BARCODEFILE
 
 # rm $TMPEMBFILE $TMPBARCODEFILE
 # Visualize embedding
-python visualize.py $EMBFILE
+python visualize.py $BARCODEFILE
