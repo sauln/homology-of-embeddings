@@ -1,11 +1,17 @@
+## set these variables to point towards your copies.
+
 NODE2VEC=~/Downloads/Snap-4.0/examples/node2vec
 RIPSER=~/research/libraries/ripser/ripser
+
+##
 
 GRAPHROOT="data/graphs"
 BARCODEROOT="data/barcodes"
 
 TMPFILE="data/tmp"
 TMPFILE2="data/tmp2"
+
+
 
 
 #echo ""
