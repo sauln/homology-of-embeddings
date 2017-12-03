@@ -1,8 +1,9 @@
+import json
+
 import click
 import umap
 import matplotlib.pyplot as plt
 
-import json
 
 from bokeh.plotting import figure, show
 from bokeh.layouts import gridplot
