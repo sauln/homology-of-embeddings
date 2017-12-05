@@ -14,15 +14,16 @@ generate randomly
 
 import networkx as nx
 
-
 import numpy as np
 from sklearn.neighbors import kneighbors_graph
+
 
 def unit_sphere(npoints=1000, ndim=3):
     vec = np.random.randn(ndim, npoints)
     vec /= np.linalg.norm(vec, axis=0)
     vec = vec.T
     return vec
+
 
 def sphere(npoints=1000, ndim=3, center=0):
     if type(center) is not list:
@@ -35,7 +36,8 @@ def sphere(npoints=1000, ndim=3, center=0):
 
     return points
 
-def sphere_graph(npoints=1000, ndim=3, center=0, nneighbors=5):
+
+def sphere_graph(npoints=1000, ndim=3, center=0, nneighbors=15):
     """ Create a graph from randomly sampled points on a sphere by connecting
         nearest neighbors
 
@@ -46,22 +48,30 @@ def sphere_graph(npoints=1000, ndim=3, center=0, nneighbors=5):
 
     return graph
 
-def points_to_graph(points, nneighbors=5):
+
+def points_to_graph(points, nneighbors):
     adj = kneighbors_graph(
         points, nneighbors, mode='connectivity', include_self=True)
     graph = nx.from_scipy_sparse_matrix(adj)
 
     return graph
 
+
 def double_ring():
     points = sphere() + sphere(1)
     graph = points_to_graph(points)
     return graph
 
+
 def seperate_rings():
     points = np.concatenate((sphere(), sphere(center=5)))
     graph = points_to_graph(points)
     return graph
+
+
+def random_graph(npoints=1000, ndim=3):
+    points = np.random.randn(ndim, npoints)
+    graph = points_to_graph(points, 15)
 
 
 def write_graph(graph, typename):
@@ -73,7 +83,9 @@ if __name__ == "__main__":
     #       They need to have nontrivial 0th and 1st homology.
     #       ring, double ring. 2 rings, etc.
 
-    write_graph(nx.cycle_graph(100), "circle")
-    write_graph(sphere_graph(), "sphere3")
-    write_graph(double_ring(), "double_ring")
-    write_graph(seperate_rings(), "seperate_rings")
+    # write_graph(nx.cycle_graph(1000), "circle")
+    write_graph(sphere_graph(ndim=2), "sphere2")
+    write_graph(sphere_graph(ndim=3), "sphere3"))
+    write_graph(random_graph(), "random-graph")
+    # write_graph(double_ring(), "double_ring")
+    # write_graph(seperate_rings(), "seperate_rings")
