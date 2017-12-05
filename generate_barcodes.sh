@@ -32,9 +32,11 @@ do
   $RIPSER --format point-cloud --dim 1 $TMPFILE --output $TMPFILE2 >/dev/null
 
   echo "--- Convert barcode to JSON"
-  python src/parse_ripser.py parse $TMPFILE2 "$BARCODEROOT/${FILE%.*}.json" >/dev/null
+  BARCODEFILE="$BARCODEROOT/${FILE%.*}.json"
+  BARCODEIMG="$BARCODEROOT/images/${FILE%.*}.png"
+  python src/parse_ripser.py parse $TMPFILE2 $BARCODEFILE 
 
-  #python visualize.py $BARCODEFILE
+  python src/visualize.py $BARCODEFILE $BARCODEIMG
 done
 
 rm $TMPFILE $TMPFILE2
