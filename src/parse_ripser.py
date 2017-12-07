@@ -48,8 +48,6 @@ def parse_barcode(infile, outfile):
         bar = [float(start), float(finish)]
         persistence_diagram[int(dim)].append(bar)
 
-
-
     with open(outfile, 'w') as fp:
         json.dump(persistence_diagram, fp)
 

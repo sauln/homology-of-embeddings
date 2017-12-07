@@ -7,12 +7,11 @@ RIPSER=~/research/libraries/ripser/ripser
 
 GRAPHROOT="data/graphs"
 BARCODEROOT="data/barcodes"
+DIAGRAMROOT="data/diagrams"
 EMBEDROOT="data/embeddings"
 
 TMPFILE="data/tmp"
 TMPFILE2="data/tmp2"
-
-
 
 
 embed_graph () {
@@ -36,7 +35,7 @@ compute_barcode () {
   FILE=$1
 
   BARCODEFILE="$BARCODEROOT/${FILE%.*}.json"
-  BARCODEIMG="$BARCODEROOT/images/${FILE%.*}.png"
+  BARCODEIMG="$DIAGRAMROOT/${FILE%.*}.png"
   EMBEDFILE="$EMBEDROOT/${FILE%.*}.emb"
 
   echo ""
@@ -47,24 +46,23 @@ compute_barcode () {
   # convert to json
   python src/parse_ripser.py parse $TMPFILE $BARCODEFILE >/dev/null
 
-  python src/visualize.py $BARCODEFILE $BARCODEIMG
+  python src/visualize.py diagram $BARCODEFILE $BARCODEIMG
 
 }
 
 
-
-
-#echo ""
-echo "Generate graphs"
+echo "Generate data"
 python src/generate_graphs.py
 
-echo ""
-echo "Embed all of `ls data/graphs`"
-for F in `ls data/graphs`
-do
-  embed_graph $F 5
-done
+# echo ""
+# echo "Embed all of `ls data/graphs`"
+# for F in `ls data/graphs`
+# do
+#   embed_graph $F 5
+# done
 
+echo ""
+echo ""
 echo "Compute barcodes for all of `ls data/embeddings`"
 for F in `ls data/embeddings`
 do

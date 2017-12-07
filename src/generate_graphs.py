@@ -56,8 +56,9 @@ def points_to_graph(points, nneighbors):
 
     return graph
 
+
 def join_graphs(graphA, graphB):
-    new_graph = nx.union(graphA, graphB, rename=('G-','H-') )
+    new_graph = nx.union(graphA, graphB, rename=('G-', 'H-'))
     assert len(new_graph.nodes) == len(graphA.nodes) + len(graphB.nodes)
 
     return new_graph
@@ -85,6 +86,10 @@ def write_graph(graph, typename):
     nx.write_edgelist(graph, f"data/graphs/{typename}.edgelist", data=False)
 
 
+def write_points(points, filename):
+    np.savetxt(filename, points, delimiter=" ")
+
+
 def write_random_points(filename, npoints=1000, ndim=3):
     points = np.random.randn(npoints, ndim)
     np.savetxt(filename, points, delimiter=" ")
@@ -96,10 +101,17 @@ if __name__ == "__main__":
     #       ring, double ring. 2 rings, etc.
 
     # write_graph(nx.cycle_graph(1000), "circle")
-    write_graph(sphere_graph(ndim=2), "sphere2")
-    write_graph(sphere_graph(ndim=3), "sphere3")
-    write_graph(join_graphs(sphere_graph(ndim=2), sphere_graph(ndim=2)), "sphere2-disjoint-sphere2")
 
+    write_graph(sphere_graph(ndim=2), "graph-sphere2")
+    write_graph(sphere_graph(ndim=3), "graph-sphere3")
+    write_graph(join_graphs(sphere_graph(ndim=2), sphere_graph(
+        ndim=2)), "graph-sphere2-disjoint-sphere2")
+    write_graph(nx.cycle_graph(100), "cycle100")
+    write_graph(nx.cycle_graph(200), "cycle200")
+    write_graph(nx.cycle_graph(300), "cycle300")
+
+    write_graph(join_graphs(nx.cycle_graph(200), nx.cycle_graph(200)),
+                "cycle200-disjoint-cycle200")
 
     write_graph(random_graph(), "random-graph")
     write_graph(nx.fast_gnp_random_graph(300, 0.1), "erdos-renyi-300-0.1")
@@ -108,5 +120,10 @@ if __name__ == "__main__":
     write_random_points("data/embeddings/random-points-2d.emb", ndim=2)
     write_random_points("data/embeddings/random-points-3d.emb", ndim=3)
     write_random_points("data/embeddings/random-points-4d.emb", ndim=4)
+    write_points(sphere(npoints=1000, ndim=3, center=0),
+                 "data/embeddings/sphere3.1000.emb")
+    write_points(sphere(npoints=1000, ndim=2, center=0),
+                 "data/embeddings/sphere2.1000.emb")
+
     # write_graph(double_ring(), "double_ring")
     # write_graph(seperate_rings(), "seperate_rings")
