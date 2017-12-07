@@ -1,3 +1,7 @@
 venv
 __pycache__
 .cache
+data/barcodes
+data/diagrams
+data/embeddings
+data/graphs

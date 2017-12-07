@@ -24,7 +24,7 @@ def plot_random():
 
 
 def plot_disjoint_cycles():
-    graph = nx.union(nx.cycle_graph(200), nx.cycle_graph(200), rename=('G-','H-') )
+    graph = nx.disjoint_union(nx.cycle_graph(200), nx.cycle_graph(200))
     cc = list(nx.connected_components(graph))
     assert len(cc) == 2
 

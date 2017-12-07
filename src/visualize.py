@@ -33,8 +33,7 @@ def persistence_diagram(data):
         xs = [d[0] for d in dat]
         ys = [d[1] for d in dat]
 
-        p.scatter(xs, ys, color=colors[dim], size=20)
-
+        p.scatter(xs, ys, color=colors[dim], size=20, alpha=0.5, marker="circle")
     p.line(x=[0, longest], y=[0, longest], color="red")
 
     return p

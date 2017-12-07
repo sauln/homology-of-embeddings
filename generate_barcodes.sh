@@ -9,6 +9,7 @@ GRAPHROOT="data/graphs"
 BARCODEROOT="data/barcodes"
 DIAGRAMROOT="data/diagrams"
 EMBEDROOT="data/embeddings"
+RIPSERROOT="data/barcodes/ripser"
 
 TMPFILE="data/tmp"
 TMPFILE2="data/tmp2"
@@ -19,12 +20,26 @@ embed_graph () {
   DIM=$2
 
   EMBEDFILE="$EMBEDROOT/${FILE%.*}.emb"
+  GRAPHFILE="$GRAPHROOT/$FILE"
 
   echo ""
-  echo "Embed $GRAPHROOT/$FILE"
+  echo "Embed $GRAPHFILE"
+
+
+  # -l walk length
+  # -d dimension
+  # -p return hyperparameter
+  # -r number of walks per source
+  # -k context size for optimization
+  # -e number of epochs in SGD
+  # -q inout hyperparameter
+
+  # -w   graph is weighted
+  # -dr  graph is directed
+  # -v verbose output
 
   echo "--- Run node2vec on graph"
-  $NODE2VEC/node2vec -i:$GRAPHROOT/$FILE -o:$TMPFILE -l:20 -d:$DIM -p:1 -dr > /dev/null
+  $NODE2VEC/node2vec -i:$GRAPHFILE -o:$TMPFILE  > /dev/null
   # convert to nicer format
   python src/parse_ripser.py trim $TMPFILE $EMBEDFILE >/dev/null
 }
@@ -33,7 +48,7 @@ embed_graph () {
 compute_barcode () {
 
   FILE=$1
-
+  RIPSERFILE="$RIPSERROOT/${FILE%.*}.r"
   BARCODEFILE="$BARCODEROOT/${FILE%.*}.json"
   BARCODEIMG="$DIAGRAMROOT/${FILE%.*}.png"
   EMBEDFILE="$EMBEDROOT/${FILE%.*}.emb"
@@ -42,9 +57,10 @@ compute_barcode () {
   echo "Process $EMBEDFILE"
 
   echo "--- Compute barcode of embedding"
-  $RIPSER --format point-cloud --dim 1 $EMBEDFILE --output $TMPFILE >/dev/null
+  $RIPSER --format point-cloud --dim 1 $EMBEDFILE --output $RIPSERFILE >/dev/null
+
   # convert to json
-  python src/parse_ripser.py parse $TMPFILE $BARCODEFILE >/dev/null
+  python src/parse_ripser.py parse $RIPSERFILE $BARCODEFILE >/dev/null
 
   python src/visualize.py diagram $BARCODEFILE $BARCODEIMG
 
@@ -54,12 +70,13 @@ compute_barcode () {
 echo "Generate data"
 python src/generate_graphs.py
 
-# echo ""
-# echo "Embed all of `ls data/graphs`"
-# for F in `ls data/graphs`
-# do
-#   embed_graph $F 5
-# done
+echo ""
+echo "Embed all graphs:"
+echo " `ls data/graphs`"
+for F in `ls data/graphs`
+do
+  embed_graph $F 5
+done
 
 echo ""
 echo ""

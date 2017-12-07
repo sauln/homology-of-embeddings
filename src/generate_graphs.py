@@ -58,7 +58,7 @@ def points_to_graph(points, nneighbors):
 
 
 def join_graphs(graphA, graphB):
-    new_graph = nx.union(graphA, graphB, rename=('G-', 'H-'))
+    new_graph = nx.disjoint_union(graphA, graphB)
     assert len(new_graph.nodes) == len(graphA.nodes) + len(graphB.nodes)
 
     return new_graph
@@ -110,8 +110,10 @@ if __name__ == "__main__":
     write_graph(nx.cycle_graph(200), "cycle200")
     write_graph(nx.cycle_graph(300), "cycle300")
 
-    write_graph(join_graphs(nx.cycle_graph(200), nx.cycle_graph(200)),
-                "cycle200-disjoint-cycle200")
+    disjoint_cycles = join_graphs(nx.cycle_graph(200), nx.cycle_graph(200))
+    assert len(disjoint_cycles.nodes) == 400
+
+    write_graph(disjoint_cycles, "cycle200-disjoint-cycle200")
 
     write_graph(random_graph(), "random-graph")
     write_graph(nx.fast_gnp_random_graph(300, 0.1), "erdos-renyi-300-0.1")
