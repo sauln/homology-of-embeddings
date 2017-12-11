@@ -39,15 +39,15 @@ def panel():
             p = persistence_diagram(data)
             p.title.text = title
             p.title.align = 'center'
-            p.title.text_font_size = '16pt'
+            p.title.text_font_size = '25pt'
             plots.append(p)
 
     layoutplots = [plots[:4], plots[4:]]
 
-    plot = gridplot(layoutplots)
+    plot = gridplot(layoutplots, toolbar_location=None)
+
+
     return plot
-
-
 
 
 def persistence_diagram(data):
@@ -77,7 +77,7 @@ def persistence_diagram(data):
     p.xgrid.grid_line_color = None
     p.ygrid.grid_line_color = None
 
-    p.legend.label_text_font_size = '15pt'
+    p.legend.label_text_font_size = '19pt'
 
     return p
 

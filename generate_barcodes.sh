@@ -86,5 +86,6 @@ do
   compute_barcode $F
 done
 
+python src/visualize.py panel data/barcodes/graph-complete-2disjoint.json panel.png
 
 rm $TMPFILE

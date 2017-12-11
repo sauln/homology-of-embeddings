@@ -112,15 +112,15 @@ if __name__ == "__main__":
     # write_graph(nx.cycle_graph(1000), "circle")
 
     sphere1 = sphere_graph(ndim=2)
-    sphere2 = join_graphs(sphere_graph(ndim=2),
-                          sphere_graph(ndim=2))
-    sphere3 = join_graphs(sphere_graph(ndim=2),
-                          sphere_graph(ndim=2),
-                          sphere_graph(ndim=2))
-    sphere4 = join_graphs(sphere_graph(ndim=2),
-                          sphere_graph(ndim=2),
-                          sphere_graph(ndim=2),
-                          sphere_graph(ndim=2))
+    sphere2 = join_graphs(sphere_graph(npoints=600, ndim=2),
+                          sphere_graph(npoints=600, ndim=2))
+    sphere3 = join_graphs(sphere_graph(npoints=600, ndim=2),
+                          sphere_graph(npoints=600, ndim=2),
+                          sphere_graph(npoints=600, ndim=2))
+    sphere4 = join_graphs(sphere_graph(npoints=600, ndim=2),
+                          sphere_graph(npoints=600, ndim=2),
+                          sphere_graph(npoints=600, ndim=2),
+                          sphere_graph(npoints=600, ndim=2))
 
     write_graph(sphere1, "graph-sphere2")
     write_graph(sphere2, "graph-sphere2-2disjoint")
