@@ -56,12 +56,21 @@ def points_to_graph(points, nneighbors):
 
     return graph
 
+def join_graphs(*graphs):
+    graph = graphs[0]
+    for g in graphs[1:]:
+        graph = nx.disjoint_union(graph, g)
 
-def join_graphs(graphA, graphB):
-    new_graph = nx.disjoint_union(graphA, graphB)
-    assert len(new_graph.nodes) == len(graphA.nodes) + len(graphB.nodes)
+    assert len(graph.nodes) == sum(len(g.nodes) for g in graphs)
+    return graph
 
-    return new_graph
+# def join_with_overlap(*graphs, overlap=0.1):
+#     # join the graphs, but create a bit of overlap
+#     node_overlap = int(graph[0].nodes * overlap)
+#
+
+def complete(nnodes=100):
+    return nx.complete_graph(nnodes)
 
 
 def double_ring():
@@ -102,30 +111,59 @@ if __name__ == "__main__":
 
     # write_graph(nx.cycle_graph(1000), "circle")
 
-    write_graph(sphere_graph(ndim=2), "graph-sphere2")
-    write_graph(sphere_graph(ndim=3), "graph-sphere3")
-    write_graph(join_graphs(sphere_graph(ndim=2), sphere_graph(
-        ndim=2)), "graph-sphere2-disjoint-sphere2")
-    write_graph(nx.cycle_graph(100), "cycle100")
-    write_graph(nx.cycle_graph(200), "cycle200")
-    write_graph(nx.cycle_graph(300), "cycle300")
+    sphere1 = sphere_graph(ndim=2)
+    sphere2 = join_graphs(sphere_graph(ndim=2),
+                          sphere_graph(ndim=2))
+    sphere3 = join_graphs(sphere_graph(ndim=2),
+                          sphere_graph(ndim=2),
+                          sphere_graph(ndim=2))
+    sphere4 = join_graphs(sphere_graph(ndim=2),
+                          sphere_graph(ndim=2),
+                          sphere_graph(ndim=2),
+                          sphere_graph(ndim=2))
 
-    disjoint_cycles = join_graphs(nx.cycle_graph(200), nx.cycle_graph(200))
-    assert len(disjoint_cycles.nodes) == 400
+    write_graph(sphere1, "graph-sphere2")
+    write_graph(sphere2, "graph-sphere2-2disjoint")
+    write_graph(sphere3, "graph-sphere2-3disjoint")
+    write_graph(sphere4, "graph-sphere2-4disjoint")
 
-    write_graph(disjoint_cycles, "cycle200-disjoint-cycle200")
+    complete1 = complete()
+    complete2 = join_graphs(complete(),
+                            complete())
+    complete3 = join_graphs(complete(),
+                            complete(),
+                            complete())
+    complete4 = join_graphs(complete(),
+                            complete(),
+                            complete(),
+                            complete())
 
-    write_graph(random_graph(), "random-graph")
-    write_graph(nx.fast_gnp_random_graph(300, 0.1), "erdos-renyi-300-0.1")
-    write_graph(nx.fast_gnp_random_graph(300, 0.2), "erdos-renyi-300-0.2")
-    write_graph(nx.fast_gnp_random_graph(300, 0.5), "erdos-renyi-300-0.5")
-    write_random_points("data/embeddings/random-points-2d.emb", ndim=2)
-    write_random_points("data/embeddings/random-points-3d.emb", ndim=3)
-    write_random_points("data/embeddings/random-points-4d.emb", ndim=4)
-    write_points(sphere(npoints=1000, ndim=3, center=0),
-                 "data/embeddings/sphere3.1000.emb")
-    write_points(sphere(npoints=1000, ndim=2, center=0),
-                 "data/embeddings/sphere2.1000.emb")
+    write_graph(complete1, "graph-complete")
+    write_graph(complete2, "graph-complete-2disjoint")
+    write_graph(complete3, "graph-complete-3disjoint")
+    write_graph(complete4, "graph-complete-4disjoint")
+
+
+    # write_graph(nx.cycle_graph(100), "cycle100")
+    # write_graph(nx.cycle_graph(200), "cycle200")
+    # write_graph(nx.cycle_graph(300), "cycle300")
+    #
+    # disjoint_cycles = join_graphs(nx.cycle_graph(200), nx.cycle_graph(200))
+    # assert len(disjoint_cycles.nodes) == 400
+    #
+    # write_graph(disjoint_cycles, "cycle200-disjoint-cycle200")
+    #
+    # write_graph(random_graph(), "random-graph")
+    # write_graph(nx.fast_gnp_random_graph(300, 0.1), "erdos-renyi-300-0.1")
+    # write_graph(nx.fast_gnp_random_graph(300, 0.2), "erdos-renyi-300-0.2")
+    # write_graph(nx.fast_gnp_random_graph(300, 0.5), "erdos-renyi-300-0.5")
+    # write_random_points("data/embeddings/random-points-2d.emb", ndim=2)
+    # write_random_points("data/embeddings/random-points-3d.emb", ndim=3)
+    # write_random_points("data/embeddings/random-points-4d.emb", ndim=4)
+    # write_points(sphere(npoints=1000, ndim=3, center=0),
+    #              "data/embeddings/sphere3.1000.emb")
+    # write_points(sphere(npoints=1000, ndim=2, center=0),
+    #              "data/embeddings/sphere2.1000.emb")
 
     # write_graph(double_ring(), "double_ring")
     # write_graph(seperate_rings(), "seperate_rings")

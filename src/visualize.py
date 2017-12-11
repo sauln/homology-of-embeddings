@@ -20,12 +20,43 @@ from parse_ripser import ripser_to_dict
 colors = {"0": "green", "1": "blue"}
 
 
+def panel():
+
+    plots = []
+    files = [("data/barcodes/graph-complete.json", "1 complete graph"),
+             ("data/barcodes/graph-complete-2disjoint.json", "2 disjoint complete graphs"),
+             ("data/barcodes/graph-complete-3disjoint.json","3 disjoint complete graphs"),
+             ("data/barcodes/graph-complete-4disjoint.json","4 disjoint complete graphs"),
+             ("data/barcodes/graph-sphere2.json", "1 sphere graph"),
+             ("data/barcodes/graph-sphere2-2disjoint.json", "2 disjoint sphere graphs"),
+             ("data/barcodes/graph-sphere2-3disjoint.json", "3 disjoint sphere graphs"),
+             ("data/barcodes/graph-sphere2-4disjoint.json", "4 disjoint sphere graphs")]
+    for barcode, title in files:
+
+        with open(barcode) as json_data:
+            data = json.load(json_data)
+
+            p = persistence_diagram(data)
+            p.title.text = title
+            p.title.align = 'center'
+            p.title.text_font_size = '16pt'
+            plots.append(p)
+
+    layoutplots = [plots[:4], plots[4:]]
+
+    plot = gridplot(layoutplots)
+    return plot
+
+
+
+
 def persistence_diagram(data):
 
     data, longest = fix_longest(data)
     buff = longest * 0.05
 
-    p = figure(plot_width=600, plot_height=600, title=f"Persistence DiagramsX", y_range=(-buff,longest+buff), x_range=(-buff, longest+buff))
+    p = figure(plot_width=600, plot_height=600, y_range=(-buff,longest+buff), x_range=(-buff, longest+buff))
+    p.line(x=[0, longest], y=[0, longest], color="red", line_width=5)
 
     #with data['0'] as dimdat:
     dimdat = data['0']
@@ -33,8 +64,20 @@ def persistence_diagram(data):
         xs = [d[0] for d in dat]
         ys = [d[1] for d in dat]
 
-        p.scatter(xs, ys, color=colors[dim], size=20, alpha=0.5, marker="circle")
-    p.line(x=[0, longest], y=[0, longest], color="red")
+        p.scatter(xs, ys, color=colors[dim], size=10, alpha=0.5, marker="circle", legend=f"Dimension {dim}")
+
+    p.toolbar.logo = None
+    p.toolbar_location = None
+
+    p.xaxis.axis_label = "Birth"
+    p.xaxis.axis_line_width = 3
+    p.yaxis.axis_label = "Death"
+    p.yaxis.axis_line_width = 3
+    p.legend.location = "bottom_right"
+    p.xgrid.grid_line_color = None
+    p.ygrid.grid_line_color = None
+
+    p.legend.label_text_font_size = '15pt'
 
     return p
 
@@ -155,6 +198,9 @@ def plot_persistence(action, barcode, outimg):
         plot = per_dimension(data)
     if action == "broken":
         plot = same_axes(data)
+
+    if action == "panel":
+        plot = panel()
 
     export_png(plot, filename=outimg)
 
