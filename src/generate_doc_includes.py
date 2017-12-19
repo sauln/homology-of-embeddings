@@ -5,6 +5,11 @@ import matplotlib.pyplot as plt
 from generate_graphs import sphere_graph, sphere, points_to_graph
 
 
+from utils.io import read_emb
+
+import umap
+
+
 def plot_sphere():
     """generate 1-sphere graph for paper """
 
@@ -32,10 +37,26 @@ def plot_disjoint_cycles():
     assert all(i[0] == "G" or i[0] == "H" for i in cc[1])
 
 
+def viz_embedding():
+    infile = "data/embeddings/graph-sphere2.emb"
+    emb = np.loadtxt(infile, delimiter=" ")
+
+    print("Fit transform")
+    reduced = umap.UMAP(n_neighbors=20, min_dist=0.1).fit_transform(emb)
+
+    print("Create scatterplot")
+    xs = [r[0] for r in reduced]
+    ys = [r[1] for r in reduced]
+    plt.scatter(xs, ys)
+    # plt.show()
+
+
+
 
 if __name__ == "__main__":
 
     #plot_sphere()
     #plot_random()
-    plot_disjoint_cycles()
+    #plot_disjoint_cycles()
+    viz_embedding()
     plt.show()
